@@ -15,6 +15,11 @@ body {
 
 @media (min-width: 425px) {
   body {
-    margin-left: 50px;
+    margin-left: 150px;
+  }
+
+  .k-drawer {
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
   }
 }

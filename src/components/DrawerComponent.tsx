@@ -2,14 +2,12 @@ import * as React from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { Drawer, DrawerSelectEvent } from '@progress/kendo-react-layout'
-import { Button } from '@progress/kendo-react-buttons'
 import {
   homeIcon,
   dollarIcon,
   qrCodeScannerIcon,
   starIcon,
   wrenchIcon,
-  menuIcon,
 } from '@progress/kendo-svg-icons'
 
 interface NavigationItem {
@@ -55,32 +53,20 @@ const items: NavigationItem[] = [
 
 const DrawerComponent = () => {
   const navigate = useNavigate()
-  const [expanded, setExpanded] = React.useState(true)
   const [selected, setSelected] = React.useState(
     items.findIndex((x) => x.selected === true)
   )
 
-  const handleClick = () => {
-    setExpanded(!expanded)
-  }
-
   const onSelect = (e: DrawerSelectEvent) => {
     navigate(e.itemTarget.props.route)
     setSelected(e.itemIndex)
-    setExpanded(!expanded)
   }
 
   return (
     <div className='drawerNavigation'>
-      <Button
-        svgIcon={menuIcon}
-        fillMode='flat'
-        onClick={handleClick}
-        style={{ marginLeft: '10px' }}
-      />
       <Drawer
         className='drawer'
-        expanded={expanded}
+        expanded={true}
         position={'start'}
         mode={'push'}
         mini={true}
@@ -89,6 +75,7 @@ const DrawerComponent = () => {
           selected: index === selected,
         }))}
         onSelect={onSelect}
+        width={150}
       ></Drawer>
     </div>
   )
