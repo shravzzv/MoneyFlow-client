@@ -2,13 +2,57 @@ import '../styles/Home.css'
 import { Typography } from '@progress/kendo-react-common'
 import FAB from '../components/FAB'
 import Entry from '../components/Entry'
+import { Dialog } from '@progress/kendo-react-dialogs'
+import {
+  RadioButton,
+  RadioButtonChangeEvent,
+} from '@progress/kendo-react-inputs'
+import { Button } from '@progress/kendo-react-buttons'
+import { useCallback, useState } from 'react'
+import { TextArea, TextBox } from '@progress/kendo-react-inputs'
+import { DropDownList } from '@progress/kendo-react-dropdowns'
+import { FloatingLabel } from '@progress/kendo-react-labels'
+import { DatePicker } from '@progress/kendo-react-dateinputs'
 
 const Home = () => {
+  const [visibleDialog, setVisibleDialog] = useState<boolean>(false)
+  const [selectedValue, setSelectedValue] = useState('INCOME')
+  const [textBoxValue, setTextBoxValue] = useState<any>(null)
+  const [textAreaValue, setTextAreaValue] = useState<any>(null)
   const income: number = 1000
   const expenses: number = 99.99
   const netWorth: number = income - expenses
   const formattedNetWorth =
     netWorth < 0 ? `-$${Math.abs(netWorth)}` : `$${netWorth}`
+  const categories = [
+    'Salary',
+    'Freelance',
+    'Investment',
+    'Gift',
+    'Bonus',
+    'Groceries',
+    'Transport',
+    'Utilities',
+    'Entertainment',
+    'Dining',
+  ]
+
+  const toggleDialog = () => {
+    setVisibleDialog(!visibleDialog)
+  }
+
+  const handleChange = useCallback(
+    (e: RadioButtonChangeEvent) => {
+      setSelectedValue(e.value)
+    },
+    [setSelectedValue]
+  )
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    console.log('Form submitted with type:', selectedValue)
+    toggleDialog()
+  }
 
   const entries = [
     {
@@ -115,7 +159,12 @@ const Home = () => {
 
   return (
     <div data-testid='home' className='home'>
-      <FAB themeColor='secondary' tooltip='Add a transaction' testId='fab' />
+      <FAB
+        themeColor='secondary'
+        tooltip='Add a transaction'
+        testId='fab'
+        onClick={toggleDialog}
+      />
 
       <div className='card'>
         <div className='netWorth'>
@@ -146,6 +195,87 @@ const Home = () => {
           />
         ))}
       </div>
+
+      {visibleDialog && (
+        <Dialog
+          title={'Enter a transaction'}
+          onClose={toggleDialog}
+          className='dialog-title'
+        >
+          <form onSubmit={handleSubmit}>
+            <div className='formControl radio'>
+              <RadioButton
+                name={'type'}
+                value={'INCOME'}
+                checked={selectedValue === 'INCOME'}
+                label={'INCOME'}
+                onChange={handleChange}
+              />
+              <br />
+              <RadioButton
+                name={'type'}
+                value={'EXPENSE'}
+                checked={selectedValue === 'EXPENSE'}
+                label={'EXPENSE'}
+                onChange={handleChange}
+              />
+              <br />
+            </div>
+
+            <div className='formControl'>
+              <FloatingLabel
+                label={'amount'}
+                editorId={'amount'}
+                editorValue={textBoxValue}
+              >
+                <TextBox
+                  id={'amount'}
+                  value={textBoxValue}
+                  onChange={(e) => setTextBoxValue(e.value)}
+                  type='number'
+                  required
+                  min={0}
+                  style={{ width: '260px' }}
+                />
+              </FloatingLabel>
+            </div>
+
+            <div className='formControl'>
+              <div style={{ marginTop: '10px' }}>Category</div>
+              <DropDownList
+                style={{ width: '260px' }}
+                data={categories}
+                defaultValue='Salary'
+              />
+            </div>
+
+            <div className='formControl'>
+              <FloatingLabel
+                className={'k-textarea-container'}
+                label={'Notes'}
+                editorId={'notes'}
+                editorValue={textAreaValue}
+                style={{ width: '260px', resize: 'vertical' }}
+              >
+                <TextArea
+                  id={'notes'}
+                  value={textAreaValue}
+                  onChange={(e) => setTextAreaValue(e.value)}
+                  style={{ marginBottom: '20px' }}
+                />
+              </FloatingLabel>
+            </div>
+
+            <div className='formControl'>
+              <DatePicker placeholder='Choose a date...' width={260} />
+            </div>
+
+            <Button type='submit' themeColor={'secondary'}>
+              Submit
+            </Button>
+          </form>
+        </Dialog>
+      )}
     </div>
   )
 }

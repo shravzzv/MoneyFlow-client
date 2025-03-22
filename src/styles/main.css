@@ -5,12 +5,49 @@
 *::after,
 *::before {
   box-sizing: border-box;
+  /* border: 1px solid gold; */
 }
 
 body {
   font-family: 'Inter', sans-serif;
   min-height: 100vh;
   background-image: linear-gradient(to top, #fad0c4 0%, #ffd1ff 100%);
+}
+
+.k-window {
+  border-radius: 20px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+  .formControl {
+    input:not([type='radio']) {
+      width: 100%;
+    }
+
+    &.radio {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+  }
+
+  button[type='submit'] {
+    margin: 10px 0;
+  }
+}
+
+.k-window-title {
+  color: var(--kendo-color-secondary);
+  font-weight: bold;
+}
+
+.k-radio-lable {
+  padding-left: 0;
 }
 
 @media (min-width: 425px) {

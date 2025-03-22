@@ -10,9 +10,15 @@ interface FABProps {
   themeColor: FloatingActionButtonThemeColor | undefined
   tooltip: string
   testId?: string
+  onClick?: () => void
 }
 
-const FAB: FC<FABProps> = ({ themeColor, tooltip, testId = '' }: FABProps) => {
+const FAB: FC<FABProps> = ({
+  themeColor,
+  tooltip,
+  testId = '',
+  onClick,
+}: FABProps) => {
   return (
     <Tooltip anchorElement='target' position='auto'>
       <FloatingActionButton
@@ -22,6 +28,7 @@ const FAB: FC<FABProps> = ({ themeColor, tooltip, testId = '' }: FABProps) => {
         className='static-fab'
         title={tooltip}
         data-testid={testId}
+        onClick={onClick}
       />
     </Tooltip>
   )
