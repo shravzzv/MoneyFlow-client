@@ -71,7 +71,7 @@ const BottomNavigationComponent = () => {
         selected: index === selected,
       }))}
       onSelect={onSelect}
-      style={{ zIndex: 2 }}
+      themeColor='secondary'
     />
   )
 }

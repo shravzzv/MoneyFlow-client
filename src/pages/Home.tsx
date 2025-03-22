@@ -7,6 +7,8 @@ const Home = () => {
   const income: number = 1000
   const expenses: number = 99.99
   const netWorth: number = income - expenses
+  const formattedNetWorth =
+    netWorth < 0 ? `-$${Math.abs(netWorth)}` : `$${netWorth}`
 
   const entries = [
     {
@@ -110,8 +112,6 @@ const Home = () => {
       updatedAt: new Date(),
     },
   ]
-  const formattedNetWorth =
-    netWorth < 0 ? `-$${Math.abs(netWorth)}` : `$${netWorth}`
 
   return (
     <div data-testid='home' className='home'>
