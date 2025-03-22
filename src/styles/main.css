@@ -7,18 +7,14 @@
   box-sizing: border-box;
 }
 
-:root {
-  --surface: white;
-  --on-surface: black;
-
-  @media (prefers-color-scheme: dark) {
-    --surface: #121212;
-    --on-surface: white;
-  }
-}
-
 body {
   font-family: 'Inter', sans-serif;
-  color: var(--on-surface);
-  background-color: var(--surface);
+  min-height: 100vh;
+  background-image: linear-gradient(to top, #fad0c4 0%, #ffd1ff 100%);
+}
+
+@media (min-width: 425px) {
+  body {
+    margin-left: 50px;
+  }
 }

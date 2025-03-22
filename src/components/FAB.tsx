@@ -22,6 +22,7 @@ const FAB: FC<FABProps> = ({ themeColor, tooltip, testId = '' }: FABProps) => {
         className='static-fab'
         title={tooltip}
         data-testid={testId}
+        style={{ zIndex: 2 }}
       />
     </Tooltip>
   )
