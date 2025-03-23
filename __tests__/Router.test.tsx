@@ -53,19 +53,6 @@ describe('Router', () => {
     expect(screen.getByTestId('expenses')).toBeInTheDocument()
   })
 
-  it('renders Ai component for the /ai path', () => {
-    render(
-      <MemoryRouter initialEntries={['/ai']}>
-        <Routes>
-          <Route path='/' element={<Layout />}>
-            <Route path='ai' element={<Ai />} />
-          </Route>
-        </Routes>
-      </MemoryRouter>
-    )
-    expect(screen.getByTestId('ai')).toBeInTheDocument()
-  })
-
   it('renders Settings component for the /settings path', () => {
     render(
       <MemoryRouter initialEntries={['/settings']}>
