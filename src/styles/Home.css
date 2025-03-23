@@ -1,0 +1,46 @@
+.home {
+  padding: 20px;
+
+  .card {
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    padding: 20px;
+    border-radius: 20px;
+    margin-bottom: 20px;
+    background-color: white;
+
+    .income,
+    .expense {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .amount {
+      color: var(--kendo-color-secondary);
+    }
+  }
+
+  .entries {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-gap: 10px;
+    margin-bottom: 100px;
+  }
+}
+
+@media (min-width: 425px) {
+  .home {
+    .card {
+      display: flex;
+      justify-content: space-evenly;
+      flex-wrap: wrap;
+
+      .netWorth {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+    }
+  }
+}

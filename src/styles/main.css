@@ -1,23 +1,62 @@
+@import url(./variables.css);
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
 
 *,
 *::after,
 *::before {
   box-sizing: border-box;
-}
-
-:root {
-  --surface: white;
-  --on-surface: black;
-
-  @media (prefers-color-scheme: dark) {
-    --surface: #121212;
-    --on-surface: white;
-  }
+  /* border: 1px solid gold; */
 }
 
 body {
   font-family: 'Inter', sans-serif;
-  color: var(--on-surface);
-  background-color: var(--surface);
+  min-height: 100vh;
+  background-image: linear-gradient(to top, #fad0c4 0%, #ffd1ff 100%);
+}
+
+.k-window {
+  border-radius: 20px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+  .formControl {
+    input:not([type='radio']) {
+      width: 100%;
+    }
+
+    &.radio {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+  }
+
+  button[type='submit'] {
+    margin: 10px 0;
+  }
+}
+
+.k-window-title {
+  color: var(--kendo-color-secondary);
+  font-weight: bold;
+}
+
+.k-radio-label {
+  padding-left: 0;
+}
+
+@media (min-width: 425px) {
+  body {
+    margin-left: 150px;
+  }
+
+  .k-drawer {
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+  }
 }
