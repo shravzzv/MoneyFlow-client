@@ -132,15 +132,15 @@ const Expense: FC = () => {
       </div>
 
       <Typography.h5>Expense</Typography.h5>
-      <Typography.h3>$ {entry.amount}</Typography.h3>
+      <Typography.h3>$ {entry!.amount}</Typography.h3>
       <Typography.p>
-        <b>Category:</b> {entry.category}
+        <b>Category:</b> {entry!.category}
       </Typography.p>
       <Typography.p>
-        <b>Notes:</b> {entry.notes ? entry.notes : 'No notes provided'}
+        <b>Notes:</b> {entry!.notes ? entry!.notes : 'No notes provided'}
       </Typography.p>
       <Typography.p>
-        <b>Date:</b> {timeAgo(new Date())}
+        <b>Date:</b> {timeAgo(entry!.date)}
       </Typography.p>
     </div>
   )
