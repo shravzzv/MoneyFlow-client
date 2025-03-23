@@ -267,7 +267,7 @@ const Home = () => {
             </div>
 
             <div className='formControl'>
-              <DatePicker placeholder='Choose a date...' width={260} />
+              <DatePicker placeholder='Choose a date...' width={260} required />
             </div>
 
             <Button type='submit' themeColor={'secondary'}>
