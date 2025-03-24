@@ -37,8 +37,32 @@ const Ai: FC = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [chats])
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    try {
+      const res = await axios.post(`${root}ai`, {
+        query: textAreaValue,
+      })
+      console.log(res.data)
+      setChats((prevChats) => [
+        ...prevChats,
+        {
+          id: res.data.id,
+          message: textAreaValue,
+          isUser: true,
+          timestamp: new Date(),
+        },
+        {
+          id: res.data.id,
+          message: res.data.message,
+          isUser: false,
+          timestamp: new Date(),
+        },
+      ])
+      setTextAreaValue('')
+    } catch (error) {
+      setError(true)
+    }
   }
 
   if (isLoading) {
