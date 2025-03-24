@@ -1,6 +1,6 @@
 import '../styles/Income.css'
 import { FC, useState, useEffect } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 import { Typography } from '@progress/kendo-react-common'
 import { Button } from '@progress/kendo-react-buttons'
 import axios from 'axios'
@@ -11,15 +11,14 @@ const Income: FC = () => {
   const [error, setError] = useState(false)
   const { id } = useParams()
   const root = 'https://moneyflow-server-production.up.railway.app/'
+  const navigate = useNavigate()
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const res = await axios.get(`${root}entries/${id}`)
         setEntry(res.data)
-        console.log(res.data)
       } catch (err) {
-        console.error('Error fetching data:', err)
         setError(true)
       } finally {
         setIsLoading(false)
@@ -29,14 +28,13 @@ const Income: FC = () => {
     fetchData()
   }, [id])
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
     const confirmDelete = window.confirm(
       'Are you sure you want to delete this entry?'
     )
     if (confirmDelete) {
-      console.log('Delete button clicked')
-    } else {
-      console.log('Delete cancelled')
+      await axios.delete(`${root}entries/${id}`)
+      navigate('/')
     }
   }
 
