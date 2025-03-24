@@ -31,6 +31,10 @@ const Home: FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [error, setError] = useState<boolean>(false)
   const root = 'https://moneyflow-server-production.up.railway.app/'
+  const [visibleDialog, setVisibleDialog] = useState<boolean>(false)
+  const [selectedValue, setSelectedValue] = useState('INCOME')
+  const [textBoxValue, setTextBoxValue] = useState<any>(null)
+  const [textAreaValue, setTextAreaValue] = useState<any>(null)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -48,28 +52,6 @@ const Home: FC = () => {
 
     fetchData()
   }, [])
-
-  const [visibleDialog, setVisibleDialog] = useState<boolean>(false)
-  const [selectedValue, setSelectedValue] = useState('INCOME')
-  const [textBoxValue, setTextBoxValue] = useState<any>(null)
-  const [textAreaValue, setTextAreaValue] = useState<any>(null)
-  const income: number = 1000
-  const expenses: number = 99.99
-  const netWorth: number = income - expenses
-  const formattedNetWorth =
-    netWorth < 0 ? `-$${Math.abs(netWorth)}` : `$${netWorth}`
-  const categories = [
-    'Salary',
-    'Freelance',
-    'Investment',
-    'Gift',
-    'Bonus',
-    'Groceries',
-    'Transport',
-    'Utilities',
-    'Entertainment',
-    'Dining',
-  ]
 
   const toggleDialog = () => {
     setVisibleDialog(!visibleDialog)
@@ -95,6 +77,17 @@ const Home: FC = () => {
   if (error) {
     return <div>Error fetching data</div>
   }
+
+  const income: number = entries
+    .filter((entry) => entry.type === 'INCOME')
+    .reduce((acc, entry) => acc + entry.amount, 0)
+  const expenses: number = entries
+    .filter((entry) => entry.type === 'EXPENSE')
+    .reduce((acc, entry) => acc + entry.amount, 0)
+  const netWorth: number = income - expenses
+  const formattedNetWorth: string =
+    netWorth < 0 ? `-$${Math.abs(netWorth)}` : `$${netWorth}`
+  const categories = Array.from(new Set(entries.map((entry) => entry.category)))
 
   return (
     <div data-testid='home' className='home'>
