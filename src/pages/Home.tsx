@@ -8,13 +8,47 @@ import {
   RadioButtonChangeEvent,
 } from '@progress/kendo-react-inputs'
 import { Button } from '@progress/kendo-react-buttons'
-import { useCallback, useState } from 'react'
+import { FC, useCallback, useState, useEffect } from 'react'
 import { TextArea, TextBox } from '@progress/kendo-react-inputs'
 import { DropDownList } from '@progress/kendo-react-dropdowns'
 import { FloatingLabel } from '@progress/kendo-react-labels'
 import { DatePicker } from '@progress/kendo-react-dateinputs'
+import axios from 'axios'
 
-const Home = () => {
+export interface EntryInterface {
+  id: number
+  type: string
+  amount: number
+  category: string
+  notes: string
+  date: Date | string
+  createdAt: Date
+  updatedAt: Date
+}
+
+const Home: FC = () => {
+  const [entries, setEntries] = useState<EntryInterface[]>([])
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [error, setError] = useState<boolean>(false)
+  const root = 'https://moneyflow-server-production.up.railway.app/'
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setIsLoading(true)
+        const res = await axios.get(`${root}entries`)
+        setEntries(res.data)
+      } catch (error) {
+        console.error('Error fetching data:', error)
+        setError(true)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    fetchData()
+  }, [])
+
   const [visibleDialog, setVisibleDialog] = useState<boolean>(false)
   const [selectedValue, setSelectedValue] = useState('INCOME')
   const [textBoxValue, setTextBoxValue] = useState<any>(null)
@@ -54,108 +88,13 @@ const Home = () => {
     toggleDialog()
   }
 
-  const entries = [
-    {
-      id: 1,
-      type: 'INCOME',
-      amount: 500,
-      category: 'Salary',
-      notes: 'Monthly salary',
-      date: new Date(),
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: 2,
-      type: 'EXPENSE',
-      amount: 50,
-      category: 'Groceries',
-      notes: 'Weekly groceries',
-      date: new Date(),
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: 3,
-      type: 'INCOME',
-      amount: 200,
-      category: 'Freelance',
-      notes: 'Freelance project',
-      date: new Date(),
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: 4,
-      type: 'EXPENSE',
-      amount: 20,
-      category: 'Transport',
-      notes: 'Bus ticket',
-      date: new Date(),
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: 5,
-      type: 'INCOME',
-      amount: 100,
-      category: 'Gift',
-      notes: 'Birthday gift',
-      date: new Date(),
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: 6,
-      type: 'EXPENSE',
-      amount: 30,
-      category: 'Entertainment',
-      notes: 'Movie ticket',
-      date: new Date(),
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: 7,
-      type: 'INCOME',
-      amount: 150,
-      category: 'Investment',
-      notes: 'Stock dividends',
-      date: new Date(),
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: 8,
-      type: 'EXPENSE',
-      amount: 100,
-      category: 'Utilities',
-      notes: 'Electricity bill',
-      date: new Date(),
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: 9,
-      type: 'INCOME',
-      amount: 250,
-      category: 'Bonus',
-      notes: 'Performance bonus',
-      date: new Date(),
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: 10,
-      type: 'EXPENSE',
-      amount: 40,
-      category: 'Dining',
-      notes: 'Dinner at restaurant',
-      date: new Date(),
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-  ]
+  if (isLoading) {
+    return <div>Loading...</div>
+  }
+
+  if (error) {
+    return <div>Error fetching data</div>
+  }
 
   return (
     <div data-testid='home' className='home'>
@@ -183,6 +122,10 @@ const Home = () => {
 
       <Typography.h5>Recent transactions</Typography.h5>
 
+      {entries.length === 0 && (
+        <Typography.h6 className='noEntries'>No entries yet</Typography.h6>
+      )}
+
       <div className='entries'>
         {entries.map((entry) => (
           <Entry
@@ -191,7 +134,7 @@ const Home = () => {
             type={entry.type}
             amount={entry.amount}
             category={entry.category}
-            date={entry.date}
+            date={new Date(entry.date)}
           />
         ))}
       </div>
