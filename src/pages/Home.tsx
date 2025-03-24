@@ -35,6 +35,8 @@ const Home: FC = () => {
   const [selectedValue, setSelectedValue] = useState('INCOME')
   const [textBoxValue, setTextBoxValue] = useState<any>(null)
   const [textAreaValue, setTextAreaValue] = useState<any>(null)
+  const [categoryValue, setCategoryValue] = useState<string>('Salary')
+  const [dateValue, setDateValue] = useState<Date | null>(null)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -64,10 +66,28 @@ const Home: FC = () => {
     [setSelectedValue]
   )
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    console.log('Form submitted with type:', selectedValue)
-    toggleDialog()
+
+    const newEntry = {
+      type: selectedValue,
+      amount: parseFloat(textBoxValue),
+      category: categoryValue,
+      notes: textAreaValue,
+      date: dateValue ? dateValue.toISOString() : new Date().toISOString(),
+    }
+
+    try {
+      const response = await axios.post(`${root}entries`, newEntry)
+      setEntries([response.data as EntryInterface, ...entries])
+      toggleDialog()
+      setTextBoxValue(null)
+      setTextAreaValue(null)
+      setDateValue(null)
+    } catch (postError) {
+      console.error('Error submitting entry:', postError)
+      setError(true)
+    }
   }
 
   if (isLoading) {
@@ -181,7 +201,8 @@ const Home: FC = () => {
               <DropDownList
                 style={{ width: '260px' }}
                 data={categories}
-                defaultValue='Salary'
+                value={categoryValue} // Use categoryValue state
+                onChange={(e) => setCategoryValue(e.value)} // Update categoryValue state
               />
             </div>
 
@@ -203,7 +224,13 @@ const Home: FC = () => {
             </div>
 
             <div className='formControl'>
-              <DatePicker placeholder='Choose a date...' width={260} required />
+              <DatePicker
+                placeholder='Choose a date...'
+                width={260}
+                required
+                value={dateValue} // Use dateValue state
+                onChange={(e) => setDateValue(e.value)} // Update dateValue state
+              />
             </div>
 
             <Button type='submit' themeColor={'secondary'}>
