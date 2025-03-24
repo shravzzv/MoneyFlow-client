@@ -20,7 +20,6 @@ const Ai: FC = () => {
         const res = await axios.get(`${root}ai`)
         setChats(res.data)
       } catch (error) {
-        console.error('Error fetching data:', error)
         setError(true)
       } finally {
         setIsLoading(false)
@@ -43,7 +42,6 @@ const Ai: FC = () => {
       const res = await axios.post(`${root}ai`, {
         query: textAreaValue,
       })
-      console.log(res.data)
       setChats((prevChats) => [
         ...prevChats,
         {
