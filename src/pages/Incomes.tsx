@@ -1,420 +1,63 @@
 import '../styles/Incomes.css'
-import { FC, useState } from 'react'
+import { FC, useState, useEffect } from 'react'
 import {
   Grid,
   GridColumn as Column,
   GridItemChangeEvent,
 } from '@progress/kendo-react-grid'
-import timeAgo from '../utils/timeAgo'
 import { Entry } from '../interfaces/Entry'
+import axios from 'axios'
+
+export interface EntryInterface {
+  id: number
+  type: string
+  amount: number
+  category: string
+  notes: string
+  date: Date | string
+  createdAt: Date
+  updatedAt: Date
+}
 
 const Incomes: FC = () => {
-  const entries: Entry[] = [
-    {
-      id: 1,
-      type: 'INCOME',
-      amount: 500,
-      category: 'Salary',
-      notes: 'Monthly salary',
-      date: new Date(),
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: 2,
-      type: 'EXPENSE',
-      amount: 50,
-      category: 'Groceries',
-      notes: 'Weekly groceries',
-      date: new Date(),
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: 3,
-      type: 'INCOME',
-      amount: 200,
-      category: 'Freelance',
-      notes: 'Freelance project',
-      date: new Date(),
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: 4,
-      type: 'EXPENSE',
-      amount: 20,
-      category: 'Transport',
-      notes: 'Bus ticket',
-      date: new Date(),
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: 5,
-      type: 'INCOME',
-      amount: 100,
-      category: 'Gift',
-      notes: 'Birthday gift',
-      date: new Date(),
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: 6,
-      type: 'EXPENSE',
-      amount: 30,
-      category: 'Entertainment',
-      notes: 'Movie ticket',
-      date: new Date(),
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: 7,
-      type: 'INCOME',
-      amount: 150,
-      category: 'Investment',
-      notes: 'Stock dividends',
-      date: new Date(),
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: 8,
-      type: 'EXPENSE',
-      amount: 100,
-      category: 'Utilities',
-      notes: 'Electricity bill',
-      date: new Date(),
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: 9,
-      type: 'INCOME',
-      amount: 250,
-      category: 'Bonus',
-      notes: 'Performance bonus',
-      date: new Date(),
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: 10,
-      type: 'EXPENSE',
-      amount: 40,
-      category: 'Dining',
-      notes: 'Dinner at restaurant',
-      date: new Date(),
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: 11,
-      type: 'INCOME',
-      amount: 300,
-      category: 'Consulting',
-      notes: 'Consulting fee',
-      date: new Date(),
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: 12,
-      type: 'INCOME',
-      amount: 400,
-      category: 'Rental',
-      notes: 'Rental income',
-      date: new Date(),
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: 13,
-      type: 'INCOME',
-      amount: 350,
-      category: 'Interest',
-      notes: 'Bank interest',
-      date: new Date(),
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: 14,
-      type: 'INCOME',
-      amount: 450,
-      category: 'Dividend',
-      notes: 'Dividend income',
-      date: new Date(),
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: 15,
-      type: 'INCOME',
-      amount: 500,
-      category: 'Salary',
-      notes: 'Monthly salary',
-      date: new Date(),
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: 16,
-      type: 'INCOME',
-      amount: 600,
-      category: 'Bonus',
-      notes: 'Year-end bonus',
-      date: new Date(),
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: 17,
-      type: 'INCOME',
-      amount: 700,
-      category: 'Freelance',
-      notes: 'Freelance project',
-      date: new Date(),
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: 18,
-      type: 'INCOME',
-      amount: 800,
-      category: 'Gift',
-      notes: 'Anniversary gift',
-      date: new Date(),
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: 19,
-      type: 'INCOME',
-      amount: 900,
-      category: 'Investment',
-      notes: 'Stock dividends',
-      date: new Date(),
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: 20,
-      type: 'INCOME',
-      amount: 1000,
-      category: 'Rental',
-      notes: 'Rental income',
-      date: new Date(),
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: 21,
-      type: 'INCOME',
-      amount: 1100,
-      category: 'Consulting',
-      notes: 'Consulting fee',
-      date: new Date(),
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: 22,
-      type: 'INCOME',
-      amount: 1200,
-      category: 'Interest',
-      notes: 'Bank interest',
-      date: new Date(),
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: 23,
-      type: 'INCOME',
-      amount: 1300,
-      category: 'Dividend',
-      notes: 'Dividend income',
-      date: new Date(),
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: 24,
-      type: 'INCOME',
-      amount: 1400,
-      category: 'Salary',
-      notes: 'Monthly salary',
-      date: new Date(),
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: 25,
-      type: 'INCOME',
-      amount: 1500,
-      category: 'Bonus',
-      notes: 'Performance bonus',
-      date: new Date(),
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: 26,
-      type: 'INCOME',
-      amount: 1600,
-      category: 'Freelance',
-      notes: 'Freelance project',
-      date: new Date(),
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: 27,
-      type: 'INCOME',
-      amount: 1700,
-      category: 'Gift',
-      notes: 'Holiday gift',
-      date: new Date(),
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: 28,
-      type: 'INCOME',
-      amount: 1800,
-      category: 'Investment',
-      notes: 'Stock dividends',
-      date: new Date(),
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: 29,
-      type: 'INCOME',
-      amount: 1900,
-      category: 'Rental',
-      notes: 'Rental income',
-      date: new Date(),
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: 30,
-      type: 'INCOME',
-      amount: 2000,
-      category: 'Consulting',
-      notes: 'Consulting fee',
-      date: new Date(),
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: 31,
-      type: 'INCOME',
-      amount: 2100,
-      category: 'Interest',
-      notes: 'Bank interest',
-      date: new Date(),
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: 32,
-      type: 'INCOME',
-      amount: 2200,
-      category: 'Dividend',
-      notes: 'Dividend income',
-      date: new Date(),
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: 33,
-      type: 'INCOME',
-      amount: 2300,
-      category: 'Salary',
-      notes: 'Monthly salary',
-      date: new Date(),
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: 34,
-      type: 'INCOME',
-      amount: 2400,
-      category: 'Bonus',
-      notes: 'Year-end bonus',
-      date: new Date(),
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: 35,
-      type: 'INCOME',
-      amount: 2500,
-      category: 'Freelance',
-      notes: 'Freelance project',
-      date: new Date(),
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: 36,
-      type: 'INCOME',
-      amount: 2600,
-      category: 'Gift',
-      notes: 'Anniversary gift',
-      date: new Date(),
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: 37,
-      type: 'INCOME',
-      amount: 2700,
-      category: 'Investment',
-      notes: 'Stock dividends',
-      date: new Date(),
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: 38,
-      type: 'INCOME',
-      amount: 2800,
-      category: 'Rental',
-      notes: 'Rental income',
-      date: new Date(),
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: 39,
-      type: 'INCOME',
-      amount: 2900,
-      category: 'Consulting',
-      notes: 'Consulting fee',
-      date: new Date(),
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: 40,
-      type: 'INCOME',
-      amount: 3000,
-      category: 'Interest',
-      notes: 'Bank interest',
-      date: new Date(),
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-  ]
-    .filter((entry) => entry.type === 'INCOME')
-    .map((entry) => ({ ...entry, date: timeAgo(entry.date) }))
+  const [allEntries, setAllEntries] = useState<EntryInterface[]>([])
+  const [isLoading, setIsLoading] = useState<boolean>(true)
+  const [error, setError] = useState<boolean>(false)
+  const root = 'https://moneyflow-server-production.up.railway.app/'
+  const [data, setData] = useState<Entry[]>([])
 
-  const [data, setData] = useState<Entry[]>(entries)
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setIsLoading(true)
+        const res = await axios.get(`${root}entries`)
+        setAllEntries(res.data)
+      } catch (error) {
+        console.error('Error fetching data:', error)
+        setError(true)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    fetchData()
+  }, [])
+
+  useEffect(() => {
+    const entries: Entry[] = allEntries
+      .filter((entry) => entry.type === 'INCOME')
+      .map((entry) => ({ ...entry, date: entry.date as Date }))
+
+    setData(entries)
+  }, [allEntries])
+
+  if (isLoading) {
+    return <div>Loading...</div>
+  }
+
+  if (error) {
+    return <div>Error fetching data</div>
+  }
 
   const handleItemChange = (event: GridItemChangeEvent) => {
     const newData = data.map((item) =>
@@ -426,10 +69,22 @@ const Incomes: FC = () => {
     setData(newData)
   }
 
+  const formatDate = (dateString: string | Date): string => {
+    const date = new Date(dateString)
+    return date.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+    })
+  }
+
   return (
     <div data-testid='incomes' className='incomes'>
       <Grid
-        data={data}
+        data={data.map((item) => ({
+          ...item,
+          date: formatDate(item.date),
+        }))}
         dataItemKey='id'
         autoProcessData={true}
         pageable={true}
@@ -437,7 +92,6 @@ const Incomes: FC = () => {
         defaultTake={10}
         filterable={true}
         sortable={true}
-        editable={{ mode: 'incell' }}
         onItemChange={handleItemChange}
         scrollable='scrollable'
       >

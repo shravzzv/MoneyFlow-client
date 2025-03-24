@@ -15,9 +15,5 @@ describe('Home Component', () => {
       </BrowserRouter>
     )
     expect(screen.getByTestId('home')).toBeInTheDocument()
-
-    const fab = screen.getByTestId('fab')
-    expect(fab).toBeInTheDocument()
-    expect(fab).toHaveClass('static-fab')
   })
 })

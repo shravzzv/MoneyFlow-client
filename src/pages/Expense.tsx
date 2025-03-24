@@ -1,126 +1,61 @@
 import '../styles/Expense.css'
-import { FC } from 'react'
-import { useParams } from 'react-router-dom'
+import { FC, useState, useEffect } from 'react'
+import { useParams, useNavigate } from 'react-router-dom'
 import { Typography } from '@progress/kendo-react-common'
-import timeAgo from '../utils/timeAgo'
 import { Button } from '@progress/kendo-react-buttons'
+import axios from 'axios'
 
 const Expense: FC = () => {
+  const [entry, setEntry] = useState<any>({})
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState(false)
   const { id } = useParams()
+  const root = 'https://moneyflow-server-production.up.railway.app/'
+  const navigate = useNavigate()
 
-  const entries = [
-    {
-      id: 1,
-      type: 'INCOME',
-      amount: 500,
-      category: 'Salary',
-      notes: 'Monthly salary',
-      date: new Date(),
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: 2,
-      type: 'EXPENSE',
-      amount: 50,
-      category: 'Groceries',
-      notes: 'Weekly groceries',
-      date: new Date(),
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: 3,
-      type: 'INCOME',
-      amount: 200,
-      category: 'Freelance',
-      notes: 'Freelance project',
-      date: new Date(),
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: 4,
-      type: 'EXPENSE',
-      amount: 20,
-      category: 'Transport',
-      notes: 'Bus ticket',
-      date: new Date(),
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: 5,
-      type: 'INCOME',
-      amount: 100,
-      category: 'Gift',
-      notes: 'Birthday gift',
-      date: new Date(),
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: 6,
-      type: 'EXPENSE',
-      amount: 30,
-      category: 'Entertainment',
-      notes: 'Movie ticket',
-      date: new Date(),
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: 7,
-      type: 'INCOME',
-      amount: 150,
-      category: 'Investment',
-      notes: 'Stock dividends',
-      date: new Date(),
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: 8,
-      type: 'EXPENSE',
-      amount: 100,
-      category: 'Utilities',
-      notes: 'Electricity bill',
-      date: new Date(),
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: 9,
-      type: 'INCOME',
-      amount: 250,
-      category: 'Bonus',
-      notes: 'Performance bonus',
-      date: new Date(),
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: 10,
-      type: 'EXPENSE',
-      amount: 40,
-      category: 'Dining',
-      notes: 'Dinner at restaurant',
-      date: new Date(),
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-  ]
-  const entry = entries.find((entry) => entry.id === parseInt(id as string))
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await axios.get(`${root}entries/${id}`)
+        setEntry(res.data)
+      } catch (err) {
+        setError(true)
+      } finally {
+        setIsLoading(false)
+      }
+    }
 
-  const handleDelete = () => {
+    fetchData()
+  }, [id])
+
+  const handleDelete = async () => {
     const confirmDelete = window.confirm(
       'Are you sure you want to delete this entry?'
     )
     if (confirmDelete) {
-      console.log('Delete button clicked')
-    } else {
-      console.log('Delete cancelled')
+      await axios.delete(`${root}entries/${id}`)
+      navigate('/')
     }
+  }
+
+  const formatDate = (dateString: string | Date): string => {
+    const date = new Date(dateString)
+    return date.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+    })
+  }
+
+  if (isLoading) {
+    return <div>Loading...</div>
+  }
+
+  if (error) {
+    return <div>Error fetching data</div>
   }
 
   return (
@@ -131,16 +66,17 @@ const Expense: FC = () => {
         </Button>
       </div>
 
-      <Typography.h5>Expense</Typography.h5>
-      <Typography.h3>$ {entry!.amount}</Typography.h3>
+      <Typography.h5>EXPENSE</Typography.h5>
+      <Typography.h3>$ {entry?.amount}</Typography.h3>
       <Typography.p>
-        <b>Category:</b> {entry!.category}
+        <b>Category:</b> {entry?.category}
       </Typography.p>
       <Typography.p>
-        <b>Notes:</b> {entry!.notes ? entry!.notes : 'No notes provided'}
+        <b>Notes:</b> {entry?.notes ? entry?.notes : 'No notes provided'}
       </Typography.p>
       <Typography.p>
-        <b>Date:</b> {timeAgo(entry!.date)}
+        <b>Date: </b>
+        {formatDate(entry?.date)}
       </Typography.p>
     </div>
   )
