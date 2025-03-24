@@ -98,13 +98,19 @@ const Home: FC = () => {
     return <div>Error fetching data</div>
   }
 
-  const income: number = entries
-    .filter((entry) => entry.type === 'INCOME')
-    .reduce((acc, entry) => acc + entry.amount, 0)
-  const expenses: number = entries
-    .filter((entry) => entry.type === 'EXPENSE')
-    .reduce((acc, entry) => acc + entry.amount, 0)
-  const netWorth: number = income - expenses
+  const income: number = parseFloat(
+    entries
+      .filter((entry) => entry.type === 'INCOME')
+      .reduce((acc, entry) => acc + entry.amount, 0)
+      .toFixed(2)
+  )
+  const expenses: number = parseFloat(
+    entries
+      .filter((entry) => entry.type === 'EXPENSE')
+      .reduce((acc, entry) => acc + entry.amount, 0)
+      .toFixed(2)
+  )
+  const netWorth: number = parseFloat((income - expenses).toFixed(2))
   const formattedNetWorth: string =
     netWorth < 0 ? `-$${Math.abs(netWorth)}` : `$${netWorth}`
   const categories = Array.from(new Set(entries.map((entry) => entry.category)))
