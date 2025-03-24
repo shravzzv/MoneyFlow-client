@@ -91,11 +91,11 @@ const Home: FC = () => {
   }
 
   if (isLoading) {
-    return <div>Loading...</div>
+    return <div data-testid='home'>Loading...</div>
   }
 
   if (error) {
-    return <div>Error fetching data</div>
+    return <div data-testid='home'>Error fetching data</div>
   }
 
   const income: number = parseFloat(
