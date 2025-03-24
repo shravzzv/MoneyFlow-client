@@ -1,12 +1,32 @@
 # MoneyFlow - Your Finance Buddy
 
+[Demo](https://money-flow-client.vercel.app/)
+
 ## Description
 
-## Features
+MoneyFlow is a comprehensive financial money management app designed to help you track, manage, and optimize your finances effectively and efficiently. It provides a user-friendly interface to record income and expenses, categorize transactions, and visualize your spending patterns. This project utilizes the Kendo UI components, to create a beautiful and responsive UI. You can enter transactions, view them, and delete them. The application aims to simplify personal finance management, making it accessible to users with varying levels of financial literacy.
+
+## **Features**
+
+**Transaction Management:**
+
+- Add new income and expense transactions with details like date, amount, category, and description
+
+- View a list of all transactions, sorted by date or category. \* Delete individual transactions.
+
+**Categorization:**
+
+- Categorize transactions to gain insights into spending habits (e.g., groceries, rent, entertainment).
+- Ability to add new categories.
+
+**User-Friendly Interface:**
+
+- Intuitive and easy-to-navigate design using Kendo UI components.
+- Responsive design for seamless experience across different devices.
 
 ## Technologies Used
 
-[![My Skills](https://skillicons.dev/icons?i=css,git,github,html,js,react,vercel,vscode)](https://skillicons.dev)
+[![My Skills](https://skillicons.dev/icons?i=css,git,github,html,js,react,vercel,vscode,ts,vitest)](https://skillicons.dev)
 
 ## Installation
 
